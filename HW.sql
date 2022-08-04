@@ -2,21 +2,31 @@
 SELECT People.FullName, People.FaxNumber, Suppliers.FaxNumber, Suppliers.PhoneNumber
 FROM Application.People AS People
 LEFT JOIN Purchasing.Suppliers AS Suppliers
-ON People.PersonID = Suppliers.PrimaryContactPersonID
+ON People.PersonID = Suppliers.PrimaryContactPersonID;
 
 -- 2
 SELECT CustomerName FROM
 (SELECT PersonID, PhoneNumber FROM Application.People UNION
-SELECT PersonID, PhoneNumber FROM Application.People_Archive) as P
+SELECT PersonID, PhoneNumber FROM Application.People_Archive) AS P
 INNER JOIN
 (SELECT CustomerName, PhoneNumber, PrimaryContactPersonID FROM Sales.Customers UNION
 SELECT CustomerName, PhoneNumber, PrimaryContactPersonID FROM Sales.Customers_Archive) AS C
 ON p.PersonID = C.PrimaryContactPersonID
-WHERE P.PhoneNumber = C.PhoneNumber
+WHERE P.PhoneNumber = C.PhoneNumber;
 
 -- 3
+SELECT DISTINCT Sales.Customers.CustomerName AS Name, Sales.CustomerTransactions.TransactionDate as T_date
+FROM Sales.Customers INNER JOIN
+Sales.CustomerTransactions ON Sales.Customers.CustomerID = Sales.CustomerTransactions.CustomerID
+WHERE T_date < '2016-01-01' ORDER BY T_date DESC;
 
 -- 4
+SELECT Stock.StockItemName,Stock.QuantityPerOuter
+FROM Warehouse.StockItems AS Stock
+INNER JOIN Purchasing.PurchaseOrders AS Orders
+ON Stock.SupplierID = Orders.SupplierID
+WHERE Orders.OrderDate = '2013';
+
 
 -- 5
 
