@@ -1,11 +1,50 @@
 -- 1
 SELECT People.FullName, People.FaxNumber, Suppliers.FaxNumber, Suppliers.PhoneNumber
-FROM People LEFT JOIN Suppliers ON People.PersonID = Suppliers.PrimaryContactPersonID
+FROM Application.People AS People
+LEFT JOIN Purchasing.Suppliers AS Suppliers
+ON People.PersonID = Suppliers.PrimaryContactPersonID
 
 -- 2
-SELECT 
+SELECT CustomerName FROM
+(SELECT PersonID, PhoneNumber FROM Application.People UNION
+SELECT PersonID, PhoneNumber FROM Application.People_Archive) as P
+INNER JOIN
+(SELECT CustomerName, PhoneNumber, PrimaryContactPersonID FROM Sales.Customers UNION
+SELECT CustomerName, PhoneNumber, PrimaryContactPersonID FROM Sales.Customers_Archive) AS C
+ON p.PersonID = C.PrimaryContactPersonID
+WHERE P.PhoneNumber = C.PhoneNumber
 
-JOIN ON
+-- 3
+
+-- 4
+
+-- 5
+
+-- 6
+
+-- 7
+
+-- 8
+
+-- 9
+
+-- 10
+
+-- 11
+
+-- 12
+
+-- 13
+
+-- 14
+
+-- 15
+
+-- 16
+
+-- 17
+
+-- 18
 
 -- 19
 CREATE VIEW view_table
@@ -14,7 +53,7 @@ SUM(CASE `group` WHEN 'Stock Group Name1' THEN quantity ELSE 0 END) as 'Stock Gr
 SUM(CASE `group` WHEN 'Stock Group Name2' THEN quantity ELSE 0 END) as 'Stock Group Name2',
 SUM(CASE `group` WHEN 'Stock Group Name3' THEN quantity ELSE 0 END) as 'Stock Group Name3',
 SUM(CASE `group` WHEN 'Stock Group Name4' THEN quantity ELSE 0 END) as 'Stock Group Name4',
-FROM raw_table
+FROM Warehouse.StockItems
 WHERE year >= 2013-01-01
 AND year <= 2017-12-31
 GROUP BY year;
@@ -27,7 +66,7 @@ GROUP BY year;
 
 -- 23
 
--- 24 need to be update
+-- 24 
 
 -- 25
 SELECT year, 
@@ -35,7 +74,7 @@ SUM(CASE `group` WHEN 'Stock Group Name1' THEN quantity ELSE 0 END) as 'Stock Gr
 SUM(CASE `group` WHEN 'Stock Group Name2' THEN quantity ELSE 0 END) as 'Stock Group Name2',
 SUM(CASE `group` WHEN 'Stock Group Name3' THEN quantity ELSE 0 END) as 'Stock Group Name3',
 SUM(CASE `group` WHEN 'Stock Group Name4' THEN quantity ELSE 0 END) as 'Stock Group Name4'
-FROM raw_table
+FROM Warehouse.StockItems
 WHERE year >= 2013-01-01
 AND year <= 2017-12-31
 GROUP BY year
@@ -47,7 +86,7 @@ SUM(CASE `group` WHEN 'Stock Group Name1' THEN quantity ELSE 0 END) as 'Stock Gr
 SUM(CASE `group` WHEN 'Stock Group Name2' THEN quantity ELSE 0 END) as 'Stock Group Name2',
 SUM(CASE `group` WHEN 'Stock Group Name3' THEN quantity ELSE 0 END) as 'Stock Group Name3',
 SUM(CASE `group` WHEN 'Stock Group Name4' THEN quantity ELSE 0 END) as 'Stock Group Name4'
-FROM raw_table
+FROM Warehouse.StockItems
 WHERE year >= 2013-01-01
 AND year <= 2017-12-31
 GROUP BY year
