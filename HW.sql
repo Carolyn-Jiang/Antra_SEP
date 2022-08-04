@@ -15,10 +15,10 @@ ON p.PersonID = C.PrimaryContactPersonID
 WHERE P.PhoneNumber = C.PhoneNumber;
 
 -- 3
-SELECT DISTINCT Sales.Customers.CustomerName AS Name, Sales.CustomerTransactions.TransactionDate as T_date
+SELECT DISTINCT Sales.Customers.CustomerName, Sales.CustomerTransactions.TransactionDate as T_date
 FROM Sales.Customers INNER JOIN
 Sales.CustomerTransactions ON Sales.Customers.CustomerID = Sales.CustomerTransactions.CustomerID
-WHERE T_date < '2016-01-01' ORDER BY T_date DESC;
+WHERE YEAR(T_date) < '2016-01-01' ORDER BY T_date DESC;
 
 -- 4
 SELECT Stock.StockItemName,Stock.QuantityPerOuter
@@ -27,10 +27,21 @@ INNER JOIN Purchasing.PurchaseOrders AS Orders
 ON Stock.SupplierID = Orders.SupplierID
 WHERE Orders.OrderDate = '2013';
 
-
 -- 5
+SELECT StockItemName FROM Warehouse.StockItems AS Stock
+WHERE LEN(Stock.StockItemName) > 10;
 
 -- 6
+SELECT Stock.StockItemName, Area.StateProvinceName, Orders.OrderDate
+FROM (((Warehouse.StockItems AS Stock
+INNER JOIN Application.StateProvinces AS Area
+ON Stock.LastEditedBY = Area.Lasteduted BY)
+INNER JOIN Sales.OrderLines AS SOL
+ON Stock.StockItemID = SOL.StockItemID)
+INNER JOIN Sales.Orders AS Orders
+ON SOL.OrderID = Orders.OrderID)
+WHERE YEAR (Orders.OrderDate) != '2014' AND Area.StateProvinceName != ('ALABAMA''GEORGIA');
+
 
 -- 7
 
